@@ -1,0 +1,526 @@
+{
+	"info": {
+		"_postman_id": "7442b790-0d21-46c9-9e34-ef9a582b2f77",
+		"name": "API_PetStore_Userflow",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "40075225"
+	},
+	"item": [
+		{
+			"name": "User flow",
+			"item": [
+				{
+					"name": "Auth login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"pm.collectionVariables.set(\"token_collection\", jsonData.token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"username\": \"emilys\",\n  \"password\": \"emilyspass\"\n} ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://dummyjson.com/auth/login",
+							"protocol": "https",
+							"host": [
+								"dummyjson",
+								"com"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Login user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const queryParams = pm.request.url.query.toObject();",
+									"pm.environment.get(\"username\", queryParams.username);",
+									"pm.environment.get(\"password\", queryParams.password);",
+									"",
+									"console.log(queryParams.username);",
+									"console.log(queryParams.password);",
+									"",
+									"pm.collectionVariables.set(\"username\", queryParams.username);",
+									"pm.collectionVariables.set(\"password\", queryParams.password);",
+									"",
+									"const jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Test data type of the response\", () => {",
+									"  pm.expect(jsonData).to.be.an(\"object\");",
+									"  pm.expect(jsonData.code).to.be.a(\"number\");",
+									"  pm.expect(jsonData.type).to.be.a(\"string\");",
+									"  pm.expect(jsonData.message).to.be.a(\"string\");",
+									"});",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"'logged in user session' message is valid\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"logged in user session\");",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{PathUrl}}/user/login?username={{$randomNoun}}&password={{$randomColor}}",
+							"host": [
+								"{{PathUrl}}"
+							],
+							"path": [
+								"user",
+								"login"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "{{$randomNoun}}"
+								},
+								{
+									"key": "password",
+									"value": "{{$randomColor}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const jsonData = pm.response.json(); ",
+									"pm.test(\"Test data type of the response\", () => {",
+									"   ",
+									"  pm.expect(jsonData).to.be.an(\"object\");",
+									"  pm.expect(jsonData.code).to.be.a(\"number\");",
+									"  pm.expect(jsonData.type).to.be.a(\"string\");",
+									"  pm.expect(jsonData.message).to.be.a(\"string\");",
+									"});",
+									"setTimeout(() => {}, 12000)",
+									"",
+									"",
+									"// get value from the request",
+									"const queryParams = JSON.parse(pm.request.body.raw);",
+									"",
+									"pm.environment.get(\"user_id\", queryParams.id);",
+									"pm.environment.get(\"firstName\", queryParams.firstName);",
+									"pm.environment.get(\"lastName\", queryParams.lastName);",
+									"pm.environment.get(\"email\", queryParams.email);",
+									"pm.environment.get(\"phone\", queryParams.phone);",
+									"",
+									"",
+									"pm.collectionVariables.set(\"user_id\", queryParams.id);",
+									"pm.collectionVariables.set(\"firstName\", queryParams.firstName);",
+									"pm.collectionVariables.set(\"lastName\", queryParams.lastName);",
+									"pm.collectionVariables.set(\"email\", queryParams.email);",
+									"pm.collectionVariables.set(\"password\", queryParams.password);",
+									"pm.collectionVariables.set(\"phone\", queryParams.phone);",
+									"",
+									"",
+									"//console.log(jsonData.firstName);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "username",
+								"value": "{",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": {{$randomInt}},\n  \"username\": \"{{username}}\",\n  \"firstName\": \"{{$randomFirstName}}\",\n  \"lastName\": \"{{$randomLastName}}\",\n  \"email\": \"{{$randomEmail}}\",\n  \"password\": \"{{password}}\",\n  \"phone\": \"{{$randomCity}}\",\n  \"userStatus\": 0\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{PathUrl}}/user",
+							"host": [
+								"{{PathUrl}}"
+							],
+							"path": [
+								"user"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const jsonData = pm.response.json();",
+									"pm.test(\"Username is valid\", function () {",
+									"    pm.expect(jsonData.username).to.eql(pm.collectionVariables.get(\"username\"));",
+									"});",
+									"",
+									"pm.test(\"Password is valid\", function () {",
+									"    pm.expect(jsonData.password).to.eql(pm.collectionVariables.get(\"password\"));",
+									"});",
+									"",
+									"",
+									"pm.test(\"UserId is a number\", function () {",
+									"    pm.expect(jsonData.id).to.be.a('number');",
+									" ",
+									"});",
+									"",
+									"pm.test(\"Username, firstName, lastName, email, password have string data type\", function () {",
+									"    pm.expect(jsonData.username).to.be.a('string');",
+									"    pm.expect(jsonData.firstName).to.be.a('string');",
+									"    pm.expect(jsonData.lastName).to.be.a('string');",
+									"    pm.expect(jsonData.email).to.be.a('string');",
+									"    pm.expect(jsonData.password).to.be.a('string');",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{PathUrl}}/user/:username",
+							"host": [
+								"{{PathUrl}}"
+							],
+							"path": [
+								"user",
+								":username"
+							],
+							"variable": [
+								{
+									"key": "username",
+									"value": "{{username}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const queryParams = JSON.parse(pm.request.body.raw);",
+									"console.log(queryParams);",
+									"pm.environment.get(queryParams.id);",
+									"pm.environment.get(queryParams.firstName);",
+									"pm.environment.get( queryParams.lastName);",
+									"pm.environment.get(queryParams.email);",
+									"pm.environment.get(queryParams.phone);",
+									"",
+									"pm.test(\"User id is changed\", function () {",
+									"    pm.expect(queryParams.id).to.not.be.eql(pm.collectionVariables.get(\"user_id\"));",
+									"});",
+									"",
+									"pm.test(\"Username and password is not changed\", function () {",
+									"    pm.expect(queryParams.username).to.be.eql(pm.collectionVariables.get(\"username\"));",
+									"});",
+									"",
+									"pm.test(\"FirstName and Lastname is updated\", function () {",
+									"    pm.expect(queryParams.firstName).to.not.be.eql(pm.collectionVariables.get(\"firstname\"));",
+									"     pm.expect(queryParams.lastName).to.not.be.eql(pm.collectionVariables.get(\"lastname\"));",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": {{$randomInt}},\n  \"username\": \"{{username}}\",\n  \"firstName\": \"{{$randomFirstName}}New\",\n  \"lastName\": \"{{$randomLastName}}Updated\",\n  \"email\": \"{{$randomEmail}}\",\n  \"password\": \"{{password}}updt\",\n  \"phone\": \"{{$randomColor}}\",\n  \"userStatus\": 0\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{PathUrl}}/user/:username",
+							"host": [
+								"{{PathUrl}}"
+							],
+							"path": [
+								"user",
+								":username"
+							],
+							"variable": [
+								{
+									"key": "username",
+									"value": "{{username}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Username of user has in message\", function () {",
+									"    pm.expect(pm.response.text()).to.include(pm.collectionVariables.get(\"username\"));",
+									"});",
+									"",
+									"pm.test(\"Response have a body\", function () {",
+									"     pm.response.to.be.withBody;",
+									"});",
+									"",
+									"pm.test(\"Date, Access-Control-Allow-Methods are present\", function () {",
+									"    pm.response.to.have.header(\"Access-Control-Allow-Methods\");",
+									"    pm.response.to.have.header(\"Date\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response time is more than 200ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.above(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{PathUrl}}/user/:username",
+							"host": [
+								"{{PathUrl}}"
+							],
+							"path": [
+								"user",
+								":username"
+							],
+							"variable": [
+								{
+									"key": "username",
+									"value": "{{username}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Logout user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response time is less than 200ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);",
+									"});",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Message 'OK' is exist \", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"ok\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{PathUrl}}/user/logout",
+							"host": [
+								"{{PathUrl}}"
+							],
+							"path": [
+								"user",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{token_collection}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "token_collection",
+			"value": ""
+		},
+		{
+			"key": "username",
+			"value": ""
+		},
+		{
+			"key": "password",
+			"value": ""
+		}
+	]
+}
