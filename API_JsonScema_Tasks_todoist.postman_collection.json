@@ -1,0 +1,963 @@
+{
+	"info": {
+		"_postman_id": "2ae16b14-c490-40f7-9df1-b1d1a2a7fb16",
+		"name": "JsonScema_Tasks_todoist",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "40075225"
+	},
+	"item": [
+		{
+			"name": "Tasks",
+			"item": [
+				{
+					"name": "POST tasks",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"",
+									"",
+									"Object.keys(jsonData).forEach(function (key) {",
+									"    pm.collectionVariables.set(\"task_\" + key, jsonData[key]);",
+									"});",
+									"",
+									"const schema = {",
+									"    \"type\": \"object\",",
+									"    \"properties\":{",
+									"        \"id\": {",
+									"            \"type\": \"string\"",
+									"        }, ",
+									"        \"assigner_id\": {",
+									"            \"anyOf\": [",
+									"                { \"type\": \"null\", ",
+									"                  \"readOnly\": true },",
+									"                { \"type\": \"string\",",
+									"                  \"readOnly\": true}",
+									"                ] ",
+									"        },",
+									"        \"assignee_id\": {",
+									"            \"anyOf\": [",
+									"                { \"type\": \"null\" },",
+									"                { \"type\": \"string\" }",
+									"                ] ",
+									"        },",
+									"        \"project_id\": {",
+									"            \"anyOf\": [",
+									"                { \"type\": \"null\", ",
+									"                  \"readOnly\": true },",
+									"                { \"type\": \"string\", ",
+									"                  \"readOnly\": true }",
+									"                ]",
+									"        },",
+									"        \"section_id\": {",
+									"            \"anyOf\": [",
+									"                { \"type\": \"null\" },",
+									"                { \"type\": \"string\" }",
+									"                ]",
+									"        },",
+									"        \"parent_id\": {",
+									"            \"anyOf\": [",
+									"                { \"type\": \"null\" },",
+									"                { \"type\": \"string\" }",
+									"                ]",
+									"        },",
+									"        \"order\": {",
+									"            \"type\": \"integer\", ",
+									"            \"readOnly\": true",
+									"        },",
+									"        \"content\": {",
+									"            \"type\": \"string\"",
+									"        },",
+									"        \"description\": {",
+									"            \"type\": \"string\"",
+									"        },",
+									"        \"is_completed\": {",
+									"            \"type\": \"boolean\"",
+									"        },",
+									"        \"labels\": {",
+									"            \"type\": \"array\",",
+									"                \"items\": {",
+									"                    \"type\": \"string\"",
+									"                    }",
+									"        },",
+									"        \"priority\": {",
+									"            \"type\": \"integer\", ",
+									"            \"minimum\": 1,",
+									"            \"maximum\": 4",
+									"        },",
+									"        \"comment_count\": {",
+									"            \"type\": \"integer\", ",
+									"            \"readOnly\": true",
+									"        },",
+									"        \"creator_id\": {",
+									"            \"type\": \"string\", ",
+									"            \"readOnly\": true",
+									"        },",
+									"        \"created_at\": {",
+									"            \"type\": \"string\", ",
+									"            \"readOnly\": true",
+									"        },",
+									"        \"due_string\": {",
+									"            \"anyOf\": [",
+									"                { \"type\": \"null\" },",
+									"                { \"type\": \"string\",",
+									"                  \"format\": \"date\",",
+									"                  \"pattern\": \"^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$\"  }",
+									"                ]",
+									"        }, ",
+									"        \"due_date\": {",
+									"            \"anyOf\": [",
+									"                { \"type\": \"null\" },",
+									"                { \"type\": \"string\",",
+									"                  \"format\": \"date\" }",
+									"                ] ",
+									"        }, ",
+									"        \"due_lang\": {",
+									"            \"anyOf\": [",
+									"                { \"type\": \"null\" },",
+									"                { \"type\": \"string\" }",
+									"                ] ",
+									"        },",
+									"        \"due_is_recurring\": {",
+									"            \"type\": \"boolean\"",
+									"        },",
+									"        \"duration\": {",
+									"            \"anyOf\": [",
+									"                { \"type\": \"null\" },",
+									"                { \"type\": \"integer\" }",
+									"                ]",
+									"        },",
+									"        \"url\": {",
+									"           \"type\": \"string\", ",
+									"           \"format\": \"uri\",",
+									"           \"readOnly\": true",
+									"        },",
+									"        \"deadline\": {",
+									"           \"anyOf\": [",
+									"                { \"type\": \"null\" },",
+									"                { \"type\": \"object\" }",
+									"                ] ",
+									"        }",
+									"    },",
+									"    \"required\": [\"assignee_id\",",
+									"                \"assigner_id\",",
+									"                \"comment_count\",",
+									"                \"content\",",
+									"                \"created_at\",",
+									"                \"creator_id\",",
+									"                \"deadline\",",
+									"                \"description\",",
+									"                \"due\",",
+									"                \"duration\",",
+									"                \"id\",",
+									"                \"is_completed\",",
+									"                \"labels\",",
+									"                \"order\",",
+									"                \"parent_id\",",
+									"                \"priority\",",
+									"                \"project_id\",",
+									"                \"section_id\",",
+									"                \"url\"],",
+									"    \"additionalProperies\": false",
+									"}",
+									"",
+									"pm.test(\"JSON schema validation\", () => {",
+									"    pm.response.to.have.jsonSchema(schema);",
+									"})",
+									"",
+									"pm.test(\"Response must be valid and have a body\", function () {",
+									"     pm.response.to.be.ok;",
+									"     pm.response.to.be.withBody;",
+									"     pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"created_at matches RFC3339 format\", function () {",
+									"    pm.expect(jsonData.created_at).to.match(/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?Z$/);",
+									"});",
+									"",
+									"pm.test(\"due_lang is according to ISO 639-1\", function () {",
+									"    pm.expect(jsonData.due.lang).to.match(/^[a-zA-Z]{2}$/);",
+									"});",
+									"",
+									"pm.test(\"due_date in YYYY-MM-DD format\", function () {",
+									"    pm.expect(jsonData.due.date).to.match(/^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$/);",
+									"});",
+									"",
+									"pm.test(\"due_string in YYYY-MM-DD format\", function () {",
+									"    pm.expect(jsonData.due.string).to.match(/^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$/);",
+									"});",
+									"",
+									"pm.test(\"url is correct\", function () {",
+									"    pm.expect(jsonData.url).to.match(/^https:\\/\\/app\\.todoist\\.com\\/app\\/task\\/\\d+$/);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"//random priority",
+									"let priority = [1,2,3,4]",
+									"",
+									"if (priority && priority.length > 0) {",
+									"    const randomIndex = Math.floor(Math.random() * priority.length);",
+									"    const randomPriority = priority[randomIndex];",
+									"    pm.collectionVariables.set(\"randomPriority\", randomPriority);",
+									"    console.log(randomPriority);",
+									"};",
+									"//random labels",
+									"let randomlabels = pm.variables.replaceIn(\"{{$randomCatchPhrase}}\"); ",
+									"pm.collectionVariables.set(\"randomlabels\", randomlabels);",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"content\": \"{{$randomColor}}\",\n  \"description\": \"{{$randomCommonFileName}}\",\n  \"project_id\": \"{{col_project_id}}\",\n  \"section_id\": null,\n  \"parent_id\": null,\n  \"order\": 6000,\n  \"labels\": [\n    \"{{randomlabels}}\"\n  ],\n  \"priority\": {{randomPriority}},\n  \"assignee_id\": null,\n  \"due_string\": null,\n  \"due_date\": \"2025-04-27\",\n  \"due_datetime\": null,\n  \"due_lang\": null,\n  \"duration\": null,\n  \"duration_unit\": null,\n  \"deadline_date\":  null,\n  \"deadline_lang\": null\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{todoist_url}}/tasks",
+							"host": [
+								"{{todoist_url}}"
+							],
+							"path": [
+								"tasks"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "POST tasks - 200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"content\": \"{{$randomColor}}\",\n  \"description\": \"{{$randomCommonFileName}}\",\n  \"project_id\": \"{{col_project_id}}\",\n  \"section_id\": null,\n  \"parent_id\": null,\n  \"order\": 9000,\n  \"labels\": [\n    \"{{randomlabels}}\"\n  ],\n  \"priority\": {{randomPriority}},\n  \"assignee_id\": null,\n  \"due_string\": null,\n  \"due_date\": \"2025-04-27\",\n  \"due_datetime\": null,\n  \"due_lang\": null,\n  \"duration\": null,\n  \"duration_unit\": null,\n  \"deadline_date\":  null,\n  \"deadline_lang\": null\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url_mock}}/tasks",
+									"host": [
+										"{{url_mock}}"
+									],
+									"path": [
+										"tasks"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [
+								{
+									"expires": "Invalid Date"
+								}
+							],
+							"body": "{\n    \"id\": \"9118222430\",\n    \"assigner_id\": null,\n    \"assignee_id\": null,\n    \"project_id\": \"2353071851\",\n    \"section_id\": null,\n    \"parent_id\": null,\n    \"order\": 9000,\n    \"content\": \"orchid\",\n    \"description\": \"eyeballs_interactions.gif\",\n    \"is_completed\": false,\n    \"labels\": [\n        \"De-engineered systemic service-desk\"\n    ],\n    \"priority\": 1,\n    \"comment_count\": 0,\n    \"creator_id\": \"53531013\",\n    \"created_at\": \"2025-04-30T13:11:32.651846Z\",\n    \"due\": {\n        \"date\": \"2025-04-27\",\n        \"string\": \"2025-04-27\",\n        \"lang\": \"en\",\n        \"is_recurring\": false\n    },\n    \"url\": \"https://app.todoist.com/app/task/9118222430\",\n    \"duration\": null,\n    \"deadline\": null\n}"
+						},
+						{
+							"name": "POST tasks - 404",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n//\"content\": \"{{$randomAdjective}}\",\n  \"description\": \"{{$randomCommonFileName}}\",\n  \"project_id\": \"{{col_project_id}}\",\n  \"section_id\": null,\n  \"parent_id\": null,\n  \"order\": 9000,\n  \"labels\": [\n    \"{{randomlabels}}\"\n  ],\n  \"priority\": {{randomPriority}},\n  \"assignee_id\": null,\n  \"due_string\": null,\n  \"due_date\": \"2025-04-27\",\n  \"due_datetime\": null,\n  \"due_lang\": null,\n  \"duration\": null,\n  \"duration_unit\": null,\n  \"deadline_date\":  null,\n  \"deadline_lang\": null\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url_mock}}/task",
+									"host": [
+										"{{url_mock}}"
+									],
+									"path": [
+										"task"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [
+								{
+									"expires": "Invalid Date"
+								}
+							],
+							"body": "{\n    \"error\": \"Not found\",\n    \"error_code\": 478,\n    \"error_extra\": {\n        \"event_id\": null,\n        \"retry_after\": 11\n    },\n    \"error_tag\": \"NOT_FOUND\",\n    \"http_code\": 404\n}"
+						}
+					]
+				},
+				{
+					"name": "GET all active tasks",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseData = pm.response.json();",
+									"",
+									"const schema = {",
+									"    \"type\": \"array\",",
+									"    \"items\": {",
+									"        \"type\": \"object\", ",
+									"        \"properties\":{",
+									"            \"id\": {",
+									"            \"type\": \"string\"",
+									"        }, ",
+									"            \"assigner_id\": {",
+									"            \"anyOf\": [",
+									"                { \"type\": \"null\", ",
+									"                  \"readOnly\": true },",
+									"                { \"type\": \"string\",",
+									"                  \"readOnly\": true}",
+									"                ] ",
+									"        },",
+									"            \"assignee_id\": {",
+									"            \"anyOf\": [",
+									"                { \"type\": \"null\" },",
+									"                { \"type\": \"string\" }",
+									"                ] ",
+									"        },",
+									"            \"project_id\": {",
+									"            \"anyOf\": [",
+									"                { \"type\": \"null\", ",
+									"                  \"readOnly\": true },",
+									"                { \"type\": \"string\", ",
+									"                  \"readOnly\": true }",
+									"                ]",
+									"        },",
+									"            \"section_id\": {",
+									"            \"anyOf\": [",
+									"                { \"type\": \"null\" },",
+									"                { \"type\": \"string\" }",
+									"                ]",
+									"        },",
+									"            \"parent_id\": {",
+									"            \"anyOf\": [",
+									"                { \"type\": \"null\" },",
+									"                { \"type\": \"string\" }",
+									"                ]",
+									"        },",
+									"            \"order\": {",
+									"            \"type\": \"integer\", ",
+									"            \"readOnly\": true",
+									"        },",
+									"            \"content\": {",
+									"            \"type\": \"string\"",
+									"        },",
+									"            \"description\": {",
+									"            \"type\": \"string\"",
+									"        },",
+									"            \"is_completed\": {",
+									"            \"type\": \"boolean\"",
+									"        },",
+									"            \"labels\": {",
+									"            \"type\": \"array\",",
+									"                \"items\": {",
+									"                    \"type\": \"string\"",
+									"                    }",
+									"        },",
+									"            \"priority\": {",
+									"            \"type\": \"integer\", ",
+									"            \"minimum\": 1,",
+									"            \"maximum\": 4",
+									"        },",
+									"            \"comment_count\": {",
+									"            \"type\": \"integer\", ",
+									"            \"readOnly\": true",
+									"        },",
+									"            \"creator_id\": {",
+									"            \"type\": \"string\", ",
+									"            \"readOnly\": true",
+									"        },",
+									"            \"created_at\": {",
+									"            \"type\": \"string\", ",
+									"            \"readOnly\": true",
+									"        },",
+									"            \"due_string\": {",
+									"            \"anyOf\": [",
+									"                { \"type\": \"null\" },",
+									"                { \"type\": \"string\",",
+									"                  \"format\": \"date\",",
+									"                  \"pattern\": \"^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$\"  }",
+									"                ]",
+									"        }, ",
+									"            \"due_date\": {",
+									"            \"anyOf\": [",
+									"                { \"type\": \"null\" },",
+									"                { \"type\": \"string\",",
+									"                  \"format\": \"date\" }",
+									"                ] ",
+									"        }, ",
+									"            \"due_lang\": {",
+									"            \"anyOf\": [",
+									"                { \"type\": \"null\" },",
+									"                { \"type\": \"string\" }",
+									"                ] ",
+									"        },",
+									"            \"due_is_recurring\": {",
+									"            \"type\": \"boolean\"",
+									"        },",
+									"            \"duration\": {",
+									"            \"anyOf\": [",
+									"                { \"type\": \"null\" },",
+									"                { \"type\": \"integer\" }",
+									"                ]",
+									"        },",
+									"            \"url\": {",
+									"            \"type\": \"string\", ",
+									"            \"format\": \"uri\",",
+									"            \"readOnly\": true",
+									"        },",
+									"            \"deadline\": {",
+									"            \"anyOf\": [",
+									"                { \"type\": \"null\" },",
+									"                { \"type\": \"object\" }",
+									"                ] ",
+									"        }",
+									"    },",
+									"    \"required\": [\"assignee_id\",",
+									"                \"assigner_id\",",
+									"                \"comment_count\",",
+									"                \"content\",",
+									"                \"created_at\",",
+									"                \"creator_id\",",
+									"                \"deadline\",",
+									"                \"description\",",
+									"                \"due\",",
+									"                \"duration\",",
+									"                \"id\",",
+									"                \"is_completed\",",
+									"                \"labels\",",
+									"                \"order\",",
+									"                \"parent_id\",",
+									"                \"priority\",",
+									"                \"project_id\",",
+									"                \"section_id\",",
+									"                \"url\"],",
+									"    \"additionalProperies\": false",
+									"    }",
+									"}",
+									"",
+									"pm.test(\"JSON schema validation\", () => {",
+									"    pm.response.to.have.jsonSchema(schema);",
+									"})",
+									"",
+									"pm.test(\"Created task is in the list\", function () {",
+									"    const responseBody = pm.response.json();",
+									"    let projectExists = false;",
+									"",
+									"    responseBody.forEach(function (task) {",
+									"        if (task.id === pm.collectionVariables.get('task_id')) {",
+									"            console.log('Here you are!');",
+									"            projectExists = true;",
+									"        }",
+									"    });",
+									"    pm.expect(projectExists).to.be.true;",
+									"});",
+									"",
+									"pm.test(\"Response is an array\", function () {",
+									"    pm.expect(responseData).to.be.an('array');",
+									"});",
+									"",
+									"pm.test(\"At least one task\", function () {",
+									"    pm.expect(responseData.length).to.be.greaterThan(0);",
+									"});",
+									"",
+									"pm.test(\"Id field is a non-empty string\", function () {",
+									"        responseData.forEach(function (task_any_value) { ",
+									"        pm.expect(task_any_value.id).to.be.a('string').and.to.have.lengthOf.at.least(1);",
+									"    });",
+									"});",
+									"",
+									"pm.test(\"Project_id field is a non-empty string\", function () {",
+									"    responseData.forEach(function (task) { ",
+									"        pm.expect(task.project_id).to.be.a('string'); ",
+									"    });",
+									"});",
+									"",
+									"pm.test(\"Created_at matches RFC3339 format\", function () {",
+									"    responseData.forEach(function (task) {",
+									"        pm.expect(task.created_at).to.match(/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?Z$/);",
+									"    });",
+									"});",
+									"",
+									"pm.test(\"due_lang is according to ISO 639-1\", function () {",
+									"    responseData.forEach(function (task_dueLang) {",
+									"         pm.expect(task_dueLang.due.lang).to.match(/^[a-zA-Z]{2}$/);",
+									"    });",
+									"});",
+									"",
+									"pm.test(\"Tasks with labels \", function () {",
+									"    responseData.forEach(function (task_labels) {",
+									"         pm.expect(task_labels.labels).not.empty;",
+									"    });",
+									"});",
+									"",
+									"pm.test(\"Parent_id is null\", function () {",
+									"        responseData.forEach(function (Parent_id) { ",
+									"         pm.expect(Parent_id.parent_id).to.be.an(\"null\");",
+									"    });",
+									"})",
+									"",
+									"pm.test(\"Priority is set and number type\", function () {",
+									"        responseData.forEach(function (Parent_id) { ",
+									"         pm.expect(Parent_id.priority).to.be.a(\"number\");",
+									"    });",
+									"})",
+									"",
+									"pm.test(\"Task(s) isn't(aren't) had assignee\", function () {",
+									"        responseData.forEach(function (assignee) { ",
+									"         pm.expect(assignee.assignee_id).to.be.an(\"null\");",
+									"    });",
+									"})",
+									"",
+									"pm.test(\"Task(s) with project\", function () {",
+									"        responseData.forEach(function (project) { ",
+									"         pm.expect(project.project_id).not.to.be.an(\"null\");",
+									"    });",
+									"})",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{todoist_url}}/tasks",
+							"host": [
+								"{{todoist_url}}"
+							],
+							"path": [
+								"tasks"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "GET all active tasks - 200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url_mock}}/tasks",
+									"host": [
+										"{{url_mock}}"
+									],
+									"path": [
+										"tasks"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [
+								{
+									"expires": "Invalid Date"
+								}
+							],
+							"body": "[\n    {\n        \"id\": \"9117090777\",\n        \"assigner_id\": null,\n        \"assignee_id\": null,\n        \"project_id\": \"2352211727\",\n        \"section_id\": null,\n        \"parent_id\": null,\n        \"order\": 9000,\n        \"content\": \"ivory\",\n        \"description\": \"schemas.wav\",\n        \"is_completed\": false,\n        \"labels\": [\n            \"Up-sized tertiary frame\"\n        ],\n        \"priority\": 4,\n        \"comment_count\": 0,\n        \"creator_id\": \"53531013\",\n        \"created_at\": \"2025-04-30T08:16:28.663767Z\",\n        \"due\": {\n            \"date\": \"2025-04-27\",\n            \"string\": \"2025-04-27\",\n            \"lang\": \"en\",\n            \"is_recurring\": false\n        },\n        \"url\": \"https://app.todoist.com/app/task/9117090777\",\n        \"duration\": null,\n        \"deadline\": null\n    },\n    {\n        \"id\": \"9117098682\",\n        \"assigner_id\": null,\n        \"assignee_id\": null,\n        \"project_id\": \"2352211727\",\n        \"section_id\": null,\n        \"parent_id\": null,\n        \"order\": 9000,\n        \"content\": \"olive\",\n        \"description\": \"moderator.shtml\",\n        \"is_completed\": false,\n        \"labels\": [\n            \"Programmable mission-critical groupware\"\n        ],\n        \"priority\": 2,\n        \"comment_count\": 0,\n        \"creator_id\": \"53531013\",\n        \"created_at\": \"2025-04-30T08:20:03.702422Z\",\n        \"due\": {\n            \"date\": \"2025-04-27\",\n            \"string\": \"2025-04-27\",\n            \"lang\": \"en\",\n            \"is_recurring\": false\n        },\n        \"url\": \"https://app.todoist.com/app/task/9117098682\",\n        \"duration\": null,\n        \"deadline\": null\n    },\n    {\n        \"id\": \"9117100034\",\n        \"assigner_id\": null,\n        \"assignee_id\": null,\n        \"project_id\": \"2352211727\",\n        \"section_id\": null,\n        \"parent_id\": null,\n        \"order\": 9000,\n        \"content\": \"sky blue\",\n        \"description\": \"virtual.mpeg\",\n        \"is_completed\": false,\n        \"labels\": [\n            \"Reduced solution-oriented synergy\"\n        ],\n        \"priority\": 2,\n        \"comment_count\": 0,\n        \"creator_id\": \"53531013\",\n        \"created_at\": \"2025-04-30T08:20:40.264644Z\",\n        \"due\": {\n            \"date\": \"2025-04-27\",\n            \"string\": \"2025-04-27\",\n            \"lang\": \"en\",\n            \"is_recurring\": false\n        },\n        \"url\": \"https://app.todoist.com/app/task/9117100034\",\n        \"duration\": null,\n        \"deadline\": null\n    }\n]"
+						},
+						{
+							"name": "GET all active tasks - 404",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url_mock}}/task",
+									"host": [
+										"{{url_mock}}"
+									],
+									"path": [
+										"task"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [
+								{
+									"expires": "Invalid Date"
+								}
+							],
+							"body": "{\n    \"error\": \"Not found\",\n    \"error_code\": 478,\n    \"error_extra\": {\n        \"event_id\": null,\n        \"retry_after\": 4\n    },\n    \"error_tag\": \"NOT_FOUND\",\n    \"http_code\": 404\n}"
+						}
+					]
+				},
+				{
+					"name": "GET task by id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"",
+									"const schema = {",
+									"    \"type\": \"object\",",
+									"    \"properties\":{",
+									"        \"id\": {",
+									"            \"type\": \"string\"",
+									"        }, ",
+									"        \"assigner_id\": {",
+									"            \"anyOf\": [",
+									"                { \"type\": \"null\", ",
+									"                  \"readOnly\": true },",
+									"                { \"type\": \"string\",",
+									"                  \"readOnly\": true}",
+									"                ] ",
+									"        },",
+									"        \"assignee_id\": {",
+									"            \"anyOf\": [",
+									"                { \"type\": \"null\" },",
+									"                { \"type\": \"string\" }",
+									"                ] ",
+									"        },",
+									"        \"project_id\": {",
+									"            \"anyOf\": [",
+									"                { \"type\": \"null\", ",
+									"                  \"readOnly\": true },",
+									"                { \"type\": \"string\", ",
+									"                  \"readOnly\": true }",
+									"                ]",
+									"        },",
+									"        \"section_id\": {",
+									"            \"anyOf\": [",
+									"                { \"type\": \"null\" },",
+									"                { \"type\": \"string\" }",
+									"                ]",
+									"        },",
+									"        \"parent_id\": {",
+									"            \"anyOf\": [",
+									"                { \"type\": \"null\" },",
+									"                { \"type\": \"string\" }",
+									"                ]",
+									"        },",
+									"        \"order\": {",
+									"            \"type\": \"integer\", ",
+									"            \"readOnly\": true",
+									"        },",
+									"        \"content\": {",
+									"            \"type\": \"string\"",
+									"        },",
+									"        \"description\": {",
+									"            \"type\": \"string\"",
+									"        },",
+									"        \"is_completed\": {",
+									"            \"type\": \"boolean\"",
+									"        },",
+									"        \"labels\": {",
+									"            \"type\": \"array\",",
+									"                \"items\": {",
+									"                    \"type\": \"string\"",
+									"                    }",
+									"        },",
+									"        \"priority\": {",
+									"            \"type\": \"integer\", ",
+									"            \"minimum\": 1,",
+									"            \"maximum\": 4",
+									"        },",
+									"        \"comment_count\": {",
+									"            \"type\": \"integer\", ",
+									"            \"readOnly\": true",
+									"        },",
+									"        \"creator_id\": {",
+									"            \"type\": \"string\", ",
+									"            \"readOnly\": true",
+									"        },",
+									"        \"created_at\": {",
+									"            \"type\": \"string\", ",
+									"            \"readOnly\": true",
+									"        },",
+									"        \"due_string\": {",
+									"            \"anyOf\": [",
+									"                { \"type\": \"null\" },",
+									"                { \"type\": \"string\",",
+									"                  \"format\": \"date\",",
+									"                  \"pattern\": \"^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$\"  }",
+									"                ]",
+									"        }, ",
+									"        \"due_date\": {",
+									"            \"anyOf\": [",
+									"                { \"type\": \"null\" },",
+									"                { \"type\": \"string\",",
+									"                  \"format\": \"date\" }",
+									"                ] ",
+									"        }, ",
+									"        \"due_lang\": {",
+									"            \"anyOf\": [",
+									"                { \"type\": \"null\" },",
+									"                { \"type\": \"string\" }",
+									"                ] ",
+									"        },",
+									"        \"due_is_recurring\": {",
+									"            \"type\": \"boolean\"",
+									"        },",
+									"        \"duration\": {",
+									"            \"anyOf\": [",
+									"                { \"type\": \"null\" },",
+									"                { \"type\": \"integer\" }",
+									"                ]",
+									"        },",
+									"        \"url\": {",
+									"           \"type\": \"string\", ",
+									"           \"format\": \"uri\",",
+									"           \"readOnly\": true",
+									"        },",
+									"        \"deadline\": {",
+									"           \"anyOf\": [",
+									"                { \"type\": \"null\" },",
+									"                { \"type\": \"object\" }",
+									"                ] ",
+									"        }",
+									"    },",
+									"    \"required\": [\"assignee_id\",",
+									"                \"assigner_id\",",
+									"                \"comment_count\",",
+									"                \"content\",",
+									"                \"created_at\",",
+									"                \"creator_id\",",
+									"                \"deadline\",",
+									"                \"description\",",
+									"                \"due\",",
+									"                \"duration\",",
+									"                \"id\",",
+									"                \"is_completed\",",
+									"                \"labels\",",
+									"                \"order\",",
+									"                \"parent_id\",",
+									"                \"priority\",",
+									"                \"project_id\",",
+									"                \"section_id\",",
+									"                \"url\"],",
+									"    \"additionalProperies\": false",
+									"}",
+									"",
+									"pm.test(\"JSON schema validation\", () => {",
+									"    pm.response.to.have.jsonSchema(schema);",
+									"});",
+									"",
+									"pm.test(\"created_at matches RFC3339 format\", function () {",
+									"    pm.expect(jsonData.created_at).to.match(/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?Z$/);",
+									"});",
+									"",
+									"pm.test(\"due_lang is according to ISO 639-1\", function () {",
+									"    pm.expect(jsonData.due.lang).to.match(/^[a-zA-Z]{2}$/);",
+									"});",
+									"",
+									"pm.test(\"due_date in YYYY-MM-DD format\", function () {",
+									"    pm.expect(jsonData.due.date).to.match(/^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$/);",
+									"});",
+									"",
+									"pm.test(\"due_string in YYYY-MM-DD format\", function () {",
+									"    pm.expect(jsonData.due.string).to.match(/^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$/);",
+									"});",
+									"",
+									"pm.test(\"url is correct\", function () {",
+									"    pm.expect(jsonData.url).to.match(/^https:\\/\\/app\\.todoist\\.com\\/app\\/task\\/\\d+$/);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{todoist_url}}/tasks/:task_id",
+							"host": [
+								"{{todoist_url}}"
+							],
+							"path": [
+								"tasks",
+								":task_id"
+							],
+							"variable": [
+								{
+									"key": "task_id",
+									"value": "{{task_id}}"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Error Schema",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url_mock}}/tasks/",
+									"host": [
+										"{{url_mock}}"
+									],
+									"path": [
+										"tasks",
+										""
+									]
+								}
+							},
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [
+								{
+									"expires": "Invalid Date"
+								}
+							],
+							"body": "[\n    {\n        \"id\": \"9117090777\",\n        \"assigner_id\": null,\n        \"assignee_id\": null,\n        \"project_id\": \"2352211727\",\n        \"section_id\": null,\n        \"parent_id\": null,\n        \"order\": 9000,\n        \"content\": \"ivory\",\n        \"description\": \"schemas.wav\",\n        \"is_completed\": false,\n        \"labels\": [\n            \"Up-sized tertiary frame\"\n        ],\n        \"priority\": 4,\n        \"comment_count\": 0,\n        \"creator_id\": \"53531013\",\n        \"created_at\": \"2025-04-30T08:16:28.663767Z\",\n        \"due\": {\n            \"date\": \"2025-04-27\",\n            \"string\": \"2025-04-27\",\n            \"lang\": \"en\",\n            \"is_recurring\": false\n        },\n        \"url\": \"https://app.todoist.com/app/task/9117090777\",\n        \"duration\": null,\n        \"deadline\": null\n    },\n    {\n        \"id\": \"9117098682\",\n        \"assigner_id\": null,\n        \"assignee_id\": null,\n        \"project_id\": \"2352211727\",\n        \"section_id\": null,\n        \"parent_id\": null,\n        \"order\": 9000,\n        \"content\": \"olive\",\n        \"description\": \"moderator.shtml\",\n        \"is_completed\": false,\n        \"labels\": [\n            \"Programmable mission-critical groupware\"\n        ],\n        \"priority\": 2,\n        \"comment_count\": 0,\n        \"creator_id\": \"53531013\",\n        \"created_at\": \"2025-04-30T08:20:03.702422Z\",\n        \"due\": {\n            \"date\": \"2025-04-27\",\n            \"string\": \"2025-04-27\",\n            \"lang\": \"en\",\n            \"is_recurring\": false\n        },\n        \"url\": \"https://app.todoist.com/app/task/9117098682\",\n        \"duration\": null,\n        \"deadline\": null\n    },\n    {\n        \"id\": \"9117100034\",\n        \"assigner_id\": null,\n        \"assignee_id\": null,\n        \"project_id\": \"2352211727\",\n        \"section_id\": null,\n        \"parent_id\": null,\n        \"order\": 9000,\n        \"content\": \"sky blue\",\n        \"description\": \"virtual.mpeg\",\n        \"is_completed\": false,\n        \"labels\": [\n            \"Reduced solution-oriented synergy\"\n        ],\n        \"priority\": 2,\n        \"comment_count\": 0,\n        \"creator_id\": \"53531013\",\n        \"created_at\": \"2025-04-30T08:20:40.264644Z\",\n        \"due\": {\n            \"date\": \"2025-04-27\",\n            \"string\": \"2025-04-27\",\n            \"lang\": \"en\",\n            \"is_recurring\": false\n        },\n        \"url\": \"https://app.todoist.com/app/task/9117100034\",\n        \"duration\": null,\n        \"deadline\": null\n    }\n]"
+						},
+						{
+							"name": "GET task by id - 200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{todoist_url}}/tasks/:task_id",
+									"host": [
+										"{{todoist_url}}"
+									],
+									"path": [
+										"tasks",
+										":task_id"
+									],
+									"variable": [
+										{
+											"key": "task_id",
+											"value": "{{task_id}}"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [
+								{
+									"expires": "Invalid Date"
+								}
+							],
+							"body": "{\n    \"id\": \"9118550723\",\n    \"assigner_id\": null,\n    \"assignee_id\": null,\n    \"project_id\": \"2353080314\",\n    \"section_id\": null,\n    \"parent_id\": null,\n    \"order\": 6000,\n    \"content\": \"sky blue\",\n    \"description\": \"circuit.htm\",\n    \"is_completed\": false,\n    \"labels\": [\n        \"Vision-oriented leading edge Graphic Interface\"\n    ],\n    \"priority\": 4,\n    \"comment_count\": 0,\n    \"creator_id\": \"53531013\",\n    \"created_at\": \"2025-04-30T14:34:39.051710Z\",\n    \"due\": {\n        \"date\": \"2025-04-27\",\n        \"string\": \"2025-04-27\",\n        \"lang\": \"en\",\n        \"is_recurring\": false\n    },\n    \"url\": \"https://app.todoist.com/app/task/9118550723\",\n    \"duration\": null,\n    \"deadline\": null\n}"
+						}
+					]
+				}
+			]
+		}
+	]
+}
